@@ -1,16 +1,8 @@
-const MAX_POINTS: u32 = 100_000;
-
 pub fn vars() {
-  println!("{:p}", &MAX_POINTS);
-  //=> 0x7ff6ab1dd438
+  let mut t2 = ((0, 1), (2, 3));
 
-  let i2: i64 = 1;
-  let i3: i64 = 2;
+  let (mut x1_ptr, _) = t2;
 
-
-  println!("i2 is {:p}", &i2);
-  //=> i2 is 0xd7b99df950
-
-  println!("i3 is {:p}", &i3);
-  //=> i3 is 0xd7b99df958
+  println!("{}, {}", x1_ptr);
+  //=> 0xa6be5af6a0
 }
