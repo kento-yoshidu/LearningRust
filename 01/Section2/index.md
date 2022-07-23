@@ -165,5 +165,74 @@ pub fn vars() {
 }
 ```
 
+## String型
+
+実データはヒープ領域に格納される。文字列リテラルからString型に変換するには`String::from()`とする。
+
+```rust
+fn main() {
+    let mut s1 = String::from("hello");
+    let mut s2 = String::from("helloworld");
+
+    // アドレスの値
+    println!("{:p}", &s1);
+    println!("{:p}", &s2);
+    /*
+    0x8d820ff808
+    0x8d820ff820
+    */
+}
+```
+
+String型はスタックに積まれる。
+
+`ptr`8byte、`len`8byte、`cap`8byte。
+
+```rust
+fn main() {
+    let mut s1 = String::from("hello");
+    let mut s2 = String::from("helloworld");
+
+    // ヒープメモリーアドレス
+    println!("{:?}", s1.as_ptr());
+    println!("{:?}", s2.as_ptr());
+    /*
+      0x1f3288d9a60
+      0x1f3288ddee0
+    */
+}
+```
+
+```rust
+fn main() {
+    let mut s1 = String::from("hello");
+    let mut s2 = String::from("helloworld");
+
+    // ヒープメモリーアドレス
+    println!("{:?}", s1.as_ptr());
+    println!("{}", s1.len());
+    println!("{}", s1.capacity());
+    /*
+      0x1575c6258a0
+      5
+      5
+    */
+}
+```
 
 
+文字列スライスもString型も実データのアドレスの情報を最初の8バイトが持つ。
+
+文字列スライスは参照、String型は**所有権**と呼ばれる。
+
+所有権者は、データに対して一人のみ。
+
+`let s1 = "hello"`、これは**静的領域**に格納されるので開放する必要がない。
+
+以下の例では所有権を移動ではなく、**借用**する例。
+
+```rust
+// String型から文字列スライスに変換
+let s1 = String::from("hello")
+let s1_ref: &str = &s1;
+```
