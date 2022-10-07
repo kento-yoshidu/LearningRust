@@ -99,3 +99,31 @@ https://qiita.com/nirasan/items/9e169859c6807c2c175b
 ## 参考
 
 https://matsumaee.hatenablog.com/entry/2021/07/19/194550
+
+## 所有権の移動
+
+```rust
+fn main() {
+    let s1: String::from("hello");
+    let s2 = s1;
+}
+```
+
+ここで`s1`から`s2`への所有権の移動（move）が起こっている。
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+        // move occurs because `s1` has type `String`, which does not implement the `Copy` trait
+    let s2 = s1;
+        // value moved here
+    println!("{} {}", s1, s2);
+                      ^^ value borrowed here after move
+}
+// For more information about this error, try `rustc --explain E0382`.
+// error: could not compile `section2` due to previous error
+```
+
+moveが発生するのは**スタックのポインターのデータで、ヒープの実データのアドレスを指しているもの**。代表的なものは`String`型。上記エラーの通り、コピートレイトが実装されていないためエラーになる。
+
+`String`型、`Vector`型、`Box`型。

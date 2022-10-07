@@ -1,11 +1,6 @@
 fn main() {
-    let mut s1 = String::from("hello");
-    let mut s2 = String::from("helloworld");
+    let s1 = String::from("hello");
+    let s2 = s1;
 
-    // ヒープメモリーアドレス
-    println!("{:?}", s1.as_ptr());
-    println!("{}", s1.len());
-    println!("{}", s1.capacity());
-    
-    s1.push_str("_new1");
+    println!("{} {}", s1, s2);
 }
