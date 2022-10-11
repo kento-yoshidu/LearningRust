@@ -54,7 +54,6 @@ fn main() {
 
     println!("{:p}, {:p}", &t2.0, &t2.1);
     //=> 0xaeb7bff440, 0xaeb7bff444
-    */
 
     let mut t2 = ((0, 1), (2, 3));
 
@@ -68,4 +67,26 @@ fn main() {
 
     println!("{:p}, {:p}", &x1_ptr, &y1_ptr);
     //=> 0x2cb3d3f628, 0x2cb3d3f630
+
+    let arr1 = [1, 2, 3, 4, 5];
+    let arr2 = [0; 10];
+
+    println!("{:?}, {:?}", arr1, arr2);
+    //=> [1, 2, 3, 4, 5], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    println!("{}, {}", arr1[0], arr2[6])
+    //=> 1, 0
+    */
+
+    let s1 = "HelloHelloHelloHelloHello"; // 25bytes
+    let s2 = "Hello"; // 5bytes
+
+    println!("{:p}", &s1);
+    println!("{:p}", &s2);
+
+    println!("{:p}", s1.as_ptr());
+    println!("{:p}", s2.as_ptr());
+
+    println!("{}", s1.len());
+    println!("{}", s2.len());
 }
