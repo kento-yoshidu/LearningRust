@@ -1,3 +1,5 @@
+mod stack_heap;
+
 fn main() {
     /*
     println!("Hello, world!");
@@ -76,7 +78,6 @@ fn main() {
 
     println!("{}, {}", arr1[0], arr2[6])
     //=> 1, 0
-    */
 
     let s1 = "HelloHelloHelloHelloHello"; // 25bytes
     let s2 = "Hello"; // 5bytes
@@ -89,4 +90,7 @@ fn main() {
 
     println!("{}", s1.len());
     println!("{}", s2.len());
+    */
+
+    stack_heap::run();
 }
