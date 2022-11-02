@@ -1,4 +1,6 @@
-mod stack_heap;
+// mod stack_heap;
+// mod box_test;
+mod ownership;
 
 fn main() {
     /*
@@ -90,7 +92,11 @@ fn main() {
 
     println!("{}", s1.len());
     println!("{}", s2.len());
-    */
 
     stack_heap::run();
+
+    box_test::box_test();
+    */
+
+    ownership::run();
 }
