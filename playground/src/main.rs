@@ -1,6 +1,7 @@
 // mod stack_heap;
 // mod box_test;
-mod ownership;
+// mod ownership;
+mod generics;
 
 fn main() {
     /*
@@ -96,7 +97,9 @@ fn main() {
     stack_heap::run();
 
     box_test::box_test();
-    */
 
     ownership::run();
+    */
+
+    generics::run();
 }
