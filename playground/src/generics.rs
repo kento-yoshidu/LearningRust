@@ -13,8 +13,8 @@ impl<T, U> PointAnother<T, U> {
         PointAnother {
             x: self.x,
             y: other.y
-      }
-  }
+        }
+    }
 }
 
 pub fn run() {
@@ -27,20 +27,20 @@ pub fn run() {
     let p1 = Point { x: 1, y: 2};
     let p2 = PointAnother { x: 1.0, y: 2 };
     let p3 = PointAnother { x: 5, y: 2.0 };
-    let p4 = PointAnother { x: "Rust", y: "Feris" };
+    let p4 = PointAnother { x: "Rust", y: "Ferris" };
     let p5 = p3.mixup(p4);
 
     println!("{}, {}", p5.x, p5.y);
 }
 
 fn largest<T: PartialOrd + Copy>(list: Vec<T>) -> T {
-  let mut largest = list[0];
+    let mut largest = list[0];
 
-  for item in list {
-    if item > largest {
-      largest = item;
+    for item in list {
+        if item > largest {
+        largest = item;
+        }
     }
-  }
 
-  largest
+    largest
 }

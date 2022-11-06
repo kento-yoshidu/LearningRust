@@ -95,6 +95,43 @@ fn main() {
 }
 ```
 
+複数作ることができる。
+
+```rs
+fn main() {
+    let s = String::from("hello");
+    let s1 = &s;
+    let s2 = &s;
+}
+```
+
+
+イミュータブルな参照が作られている状態でミュータブルな参照を利用することはできない。既にどこからか参照されている状態で、値を変更することはできない。
+
+```rs
+fn main() {
+    let mut s10 = String::from("Hello");
+    let r = &s10;
+    let m = &mut s10;
+
+    println!("{}, {}", r, m);
+    /*
+      error[E0502]: cannot borrow `s10` as mutable because it is also borrowed as immutable
+        |
+        |     let r = &s10;
+        |             ---- immutable borrow occurs here
+        |     let m = &mut s10;
+        |             ^^^^^^^^ mutable borrow occurs here
+        | 
+        |     println!("{}, {}", r, m);
+        |                        - immutable borrow later used here
+      For more information about this error, try `rustc --explain E0502`.
+    */
+}
+```
+
+
+
 ## 可変参照
 
 可変参照は値を書き換えたいときに使用します。
@@ -171,5 +208,59 @@ fn main() {
 
     println!("{}", s);
     //=> kento!!!
+}
+```
+
+以下は、可変参照されている状態で所有権者がアクセスしようとしてエラーになっている例。可変参照`m`が役割を終わる前に所有権者`s11`がアクセスしようとしているため。
+
+```rs
+fn main() {
+    let mut s11 = String::from("Hello");
+
+    let m = &mut s11;
+
+    println!("{}", s11);
+    println!("{}", m);
+    /*
+      Compiling rust-lesson v0.1.0 (C:\github\LearningRust\playground)
+      error[E0502]: cannot borrow `s11` as immutable because it is also borrowed as mutable
+        |
+        |     let m = &mut s11;
+        |             -------- mutable borrow occurs here
+        |     println!("{}", s11);
+        |                    ^^^ immutable borrow occurs here
+        |     println!("{}", m);
+        |                    - mutable borrow later used here
+      For more information about this error, try `rustc --explain E0502`.
+    */
+}
+```
+
+順番を返ればコンパイルが通る。
+
+```rs
+fn main() {
+    let mut s11 = String::from("Hello");
+
+    let m = &mut s11;
+
+    println!("{}", m);
+    println!("{}", s11);
+}
+```
+
+以下の例もOK。
+
+```rs
+fn main() {
+    let mut s12 = String::from("Hello");
+    let r1 = &s12;
+    let r2 = &s12;
+
+    println!("{}{}{}", s12, r1, r2);
+
+    let m = &mut s12;
+    *m = String::from("I love Rust.");
+    println!("{}", m);
 }
 ```
