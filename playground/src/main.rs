@@ -1,7 +1,13 @@
 // mod stack_heap;
 // mod box_test;
 // mod ownership;
-mod generics;
+// mod generics;
+// mod leifttime;
+// mod structs;
+// mod enums;
+// mod traits;
+// mod error_handling;
+mod unit_test;
 
 fn main() {
     /*
@@ -99,7 +105,16 @@ fn main() {
     box_test::box_test();
 
     ownership::run();
-    */
 
     generics::run();
+
+    leifttime::run();
+    */
+
+    // structs::run()
+    // enums::run();
+
+    // traits::run();
+
+    // error_handling::run();
 }
