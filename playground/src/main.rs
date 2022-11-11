@@ -7,7 +7,9 @@
 // mod enums;
 // mod traits;
 // mod error_handling;
-mod unit_test;
+// mod unit_test;
+
+mod samplehoge;
 
 fn main() {
     /*
@@ -117,4 +119,6 @@ fn main() {
     // traits::run();
 
     // error_handling::run();
+
+    samplehoge::run();
 }
