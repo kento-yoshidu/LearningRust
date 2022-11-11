@@ -1,10 +1,8 @@
 # 文字に関するデータ型
 
-`char`と`&str`（文字列スライス）と`String`が存在します。
+`&str`（文字列スライス）と`String`などが存在します。
 
-`char`はユニコードの1文字を表現します。
-
-`&str`は文字列スライスと呼ばれるもので、UTF-8の配列で、いわゆる文字列リテラルを表現します。
+`&str`は文字列スライスと呼ばれるもので、UTF-8の配列です。
 
 `String`は文字列を表すUTF-8のベクター型（変更可能な配列）です。
 
@@ -16,13 +14,14 @@
 |---|---|---|
 |型|スライス型(`&[u8]`)|ベクター型(`Vec<u8>`)|
 |データ|プリミティブ|変更可能な配列|
-|変更可能か|immutable|mutable|
+|mutable?|immutable|mutable|
 |実データの保存場所|静的領域|ヒープ領域|
 |所有権|持たない|持つ|
+|コピートレイト|持つ|持たない|
 
 # `&str`型
 
-`&str`は特に**文字列スライス**とも呼ばれ、プリミティブ型です。いわゆる文字列リテラルというやつは、Rustでは`&str`がそれに該当します。
+`&str`は特に**文字列スライス**とも呼ばれ、プリミティブ型です。
 
 以下の場合は推論が働き、`s1`や`s2`は`&str`型とみなされます。
 
@@ -37,7 +36,7 @@ fn main() {
 
 `&str`はUTF-8のバイト列への**参照**です。以下のように2つの変数を宣言した時、`s1`用に10バイト、`s2`用に5バイトの保存領域が**静的領域上**に確保されます。
 
-`&str`自体は参照であるため、`{:p}`でスタックメモリーの先頭アドレスを取り出すことができます。
+`&str`自体は参照ですが、これがスタックメモリーにどうやって積まれているかを確認します。`{:p}`でスタックメモリーの先頭アドレスを取り出すことができます。
 
 ```rust
 fn main() {
@@ -67,11 +66,11 @@ fn main() {
 }
 ```
 
-`s1`は48バイトですが、`0x58 - 0x48`は10進数で16です。先ほどと変わりませんね。よって、`s1`の文字列のバイト数によってスタック上に占める領域は変わらないと言えます（文字列がスタック上に積まれているわけではなさそう）。この16バイトは一体なんなのでしょうか？
+`s1`は48バイトですが、`0x58 - 0x48`は10進数で16です。先ほどと変わりませんね。よって、`s1`の文字列のバイト数によってスタック上に占める領域は変わらないと言えます。この16バイトは一体なんなのでしょうか？
 
 ## `&str`のデータ取扱い
 
-`&str`は実データへの**参照**でありスタックに積まれます。そして、それが指し示す実データは静的領域上に存在しています。
+何度も言っている通り、`&str`は実データへの**参照**でありスタックに積まれます。そして、それが指し示す実データは静的領域上に存在しています。
 
 ![](./images/image01.png)
 
@@ -122,23 +121,17 @@ fn main() {
 
 - `ptr`は`as_ptr()`、`len`は`len()`で取得できます。
 
-https://qiita.com/yagince/items/e7474839246ced595f7a
+[\[Rust\] &amp;strとStringを理解しようと思ったらsliceやmutを理解できてないことに気づいた話 - Qiita](https://qiita.com/yagince/items/e7474839246ced595f7a)
 
-https://qiita.com/kujirahand/items/fcb4f75dbdbfaf36aa75
+[Rustのcharと&amp;strとStringが難しい - Qiita](https://qiita.com/kujirahand/items/fcb4f75dbdbfaf36aa75)
 
-https://qiita.com/Kogia_sima/items/88920a2a14448ef4dbe3
+[Rustの&amp;strや&amp;[T]はどこを参照しているのか - Qiita](https://qiita.com/Kogia_sima/items/88920a2a14448ef4dbe3)
 
-https://zenn.dev/philomagi/articles/rust_why_cant_use_str_as_both_argument_and_return
+[Rust - strが引数/戻り値で使えない理由について](https://zenn.dev/philomagi/articles/rust_why_cant_use_str_as_both_argument_and_return)
 
-https://www.zakioka.net/blog/memory-management-for-rust/
+[Rust のメモリ管理](https://www.zakioka.net/blog/memory-management-for-rust/)
 
-https://www.zakioka.net/blog/memory-management-for-rust/
-
-https://techracho.bpsinc.jp/yoshi/2021_12_24/114720
-
-https://qiita.com/Kogia_sima/items/88920a2a14448ef4dbe3
-
-https://qiita.com/k-yanai60/items/4c8e3562fe6d22f845a9
+[Rustの文字列を理解する - Qiita](https://qiita.com/k-yanai60/items/4c8e3562fe6d22f845a9)
 
 ## スライスって？
 
@@ -172,15 +165,29 @@ Stringは以下の要素で構成されます。
 
 String型のスタックに積まれます。ポインターがヒープメモリーにあるデータの先頭アドレスを示しています。
 
-https://qiita.com/yagince/items/e7474839246ced595f7a
-
-https://note.com/marupeke296/n/n9b69cc5b45d4
+[Rust: 何だかピンと来ないRustの文字周り事情…｜Marupeke-IKD｜note](https://note.com/marupeke296/n/n9b69cc5b45d4)
 
 https://qiita.com/iwatake2222/items/79fe0f33fa33d7e2f5c5#string
 
 https://zenn.dev/masayannuu/articles/beed577d02dec5
 
 https://helabenkhalfallah.medium.com/rust-in-a-nutshell-ownership-a9cd6afeb280
+
+https://blog.ojisan.io/many-copies-original-sin
+
+## なんで`str`を引数にとれない？
+
+`str`は**文字列データそのもの**であり、つまり任意長です。そのためコンパイル時にサイズが分からず、スタックに積めません。しかし`&str`は参照であるため、先述したように16バイトであると確定しているためスタックに積むことができます。
+
+とりあえず実行してみて、エラーメッセージを読めば理解できるのがRustのいいところです。
+
+JavaScript
+javascript
+Javascript
+
+Ruby on Rails
+ruby on rails
+
 
 ## `String`と`&str`の変換
 
