@@ -1,5 +1,6 @@
 mod my_print;
 mod my_struct;
+mod my_enum;
 
 fn my_print<T: std::fmt::Display>(str: &T) {
     println!("{}", str);
@@ -176,6 +177,8 @@ fn main() {
     kento.owner();
 
     my_struct::run();
+
+    my_enum::run();
 }
 
 // https://zenn.dev/ucwork/articles/6de5c9c2257f2d
