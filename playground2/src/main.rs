@@ -176,9 +176,8 @@ fn main() {
 
     kento.owner();
 
-    my_struct::run();
-
-    my_enum::run();
+    // my_struct::run();
+    // my_enum::run();
 }
 
 // https://zenn.dev/ucwork/articles/6de5c9c2257f2d
