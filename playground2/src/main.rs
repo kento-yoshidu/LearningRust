@@ -1,4 +1,5 @@
 mod my_print;
+mod my_struct;
 
 fn my_print<T: std::fmt::Display>(str: &T) {
     println!("{}", str);
@@ -173,6 +174,8 @@ fn main() {
     kento.age_incr_replace(30);
 
     kento.owner();
+
+    my_struct::run();
 }
 
 // https://zenn.dev/ucwork/articles/6de5c9c2257f2d
