@@ -47,6 +47,36 @@ fn print_mydiv(x: i32, y: i32) {
     }
 }
 
+fn print_mydiv2(x: i32, y: i32) {
+    let ret = myDiv(x, y);
+
+    if ret.is_ok() {
+        println!("no error. ans = {}", ret.unwrap())
+    } else {
+        println!("{}", ret.err().unwrap())
+    }
+}
+
+fn repeat_mydiv(arr: &[(i32, i32)]) -> Result<Vec<i32>, DivError> {
+    let mut ret = Vec::new();
+
+    for aa in arr {
+        // エラーが返されると中断。
+        // mydiv()のエラーをrepeat_mydiv()のエラーとして返す
+        let ans = myDiv(aa.0, aa.1)?;
+        ret.push(ans);
+        println!("pushed: {} / {} = {}", aa.0, aa.1, ans)
+    }
+    Ok(ret)
+}
+
+fn print_repeat_mydiv(result: Result<Vec<i32>, DivError>) {
+    match result {
+        Ok(v) => println!("{:?}", v),
+        Err(e) => println!("{}", e)
+    }
+}
+
 pub fn run() {
     func_ex_print_result(func_ex_div_result(10, 5));
     func_ex_print_result(func_ex_div_result(10, 0));
@@ -54,4 +84,14 @@ pub fn run() {
     print_mydiv(5, 2);
     print_mydiv(5, 0);
     print_mydiv(-1, -1);
+
+    print_mydiv2(5, 2);
+    print_mydiv2(5, 0);
+    print_mydiv2(-1, -1);
+
+    print_repeat_mydiv(repeat_mydiv(&[(2, 1), (9, 3)]));
+
+    print_repeat_mydiv(repeat_mydiv(&[(2, 1), (-6, -3), (5, 2)]));
+
+    print_repeat_mydiv(repeat_mydiv(&[(2, 1), (-6, 0), (6, 3)]));
 }
