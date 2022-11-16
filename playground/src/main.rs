@@ -9,8 +9,6 @@
 // mod error_handling;
 // mod unit_test;
 
-mod samplehoge;
-
 fn main() {
     /*
     println!("Hello, world!");
