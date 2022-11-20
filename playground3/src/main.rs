@@ -1,7 +1,8 @@
 mod option;
 
 mod test_module;
-use test_module::*;
+
+mod my_trait;
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
@@ -35,6 +36,8 @@ fn main() {
     let val = test_module::sub_module1::TestStruct::new(10, 20);
 
     println!("{:?}", val);
+
+    my_trait::run();
 
 }
 
