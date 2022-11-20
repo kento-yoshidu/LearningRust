@@ -2,6 +2,7 @@ mod my_print;
 mod my_struct;
 mod my_enum;
 mod my_result;
+mod my_match_iflet;
 
 fn my_print<T: std::fmt::Display>(str: &T) {
     println!("{}", str);
@@ -179,7 +180,8 @@ fn main() {
 
     // my_struct::run();
     // my_enum::run();
-    my_result::run();
+    // my_result::run();
+    my_match_iflet::run();
 }
 
 // https://zenn.dev/ucwork/articles/6de5c9c2257f2d
