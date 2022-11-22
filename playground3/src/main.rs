@@ -1,5 +1,8 @@
 mod option;
 
+mod test_module;
+use test_module::*;
+
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
         Err("div by zero")
@@ -21,8 +24,17 @@ fn func_ex_print_result<T: std::fmt::Display, E: std::fmt::Display>(ans: Result<
 fn main() {
     // fizzbuzz::run();
     // ownership::run();
-    func_ex_print_result(func_ex_div_result(10, 5));
+    // func_ex_print_result(func_ex_div_result(10, 5));
 
-    option::run();
+    // option::run();
+
+    // crate::test_module::sub_module1::test_fn1();
+    self::test_module::sub_module1::test_fn1();
+    self::test_module::sub_module2::test_fn1();
+
+    let val = test_module::sub_module1::TestStruct::new(10, 20);
+
+    println!("{:?}", val);
+
 }
 
