@@ -2,6 +2,7 @@ mod option;
 mod test_module;
 mod my_trait;
 mod my_derive;
+mod my_generics;
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
@@ -39,6 +40,8 @@ fn main() {
     my_trait::run();
 
     my_derive::run();
+
+    my_generics::run();
 
 }
 
