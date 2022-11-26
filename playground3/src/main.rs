@@ -1,8 +1,12 @@
+/*
 mod option;
 mod test_module;
 mod my_trait;
 mod my_derive;
 mod my_generics;
+*/
+
+mod my_error_handling;
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
@@ -23,13 +27,14 @@ fn func_ex_print_result<T: std::fmt::Display, E: std::fmt::Display>(ans: Result<
 // mod ownership;
 
 fn main() {
-    // fizzbuzz::run();
-    // ownership::run();
-    // func_ex_print_result(func_ex_div_result(10, 5));
+    /*
+    fizzbuzz::run();
+    ownership::run();
+    func_ex_print_result(func_ex_div_result(10, 5));
 
-    // option::run();
+    option::run();
 
-    // crate::test_module::sub_module1::test_fn1();
+    crate::test_module::sub_module1::test_fn1();
     self::test_module::sub_module1::test_fn1();
     self::test_module::sub_module2::test_fn1();
 
@@ -42,6 +47,9 @@ fn main() {
     my_derive::run();
 
     my_generics::run();
+    */
+
+    my_error_handling::run();
 
 }
 
