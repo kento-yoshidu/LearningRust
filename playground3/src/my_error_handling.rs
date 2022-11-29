@@ -1,9 +1,24 @@
+use std::f32::consts::E;
+
 fn needEven(a: i32) -> Result<i32, String> {
     if a % 2 == 0 {
         Ok(a)
     } else {
-        Err(String::from("偶数"))
+        Err(String::from("偶数にしてね"))
     }
+}
+
+fn double_even(b: i32) -> Result<i32, String> {
+    /*
+    match needEven(b) {
+        Ok(v) => Ok(v * 2),
+        Err(err) => Err(err)
+    }
+    */
+
+    // エラーの委譲
+    let x = needEven(b)?;
+    Ok(x)
 }
 
 pub fn run() {
@@ -16,8 +31,8 @@ pub fn run() {
 
     // 失敗する可能性のある処理
 
-    println!("{:?}" ,needEven(2));
-    println!("{:?}" ,needEven(1));
+    println!("{:?}", needEven(2));
+    println!("{:?}", needEven(1));
 
     let x = match needEven(2) {
         Ok(value) => value,
@@ -42,4 +57,14 @@ pub fn run() {
 
     // println!("{:?}", s.err());
     //=> Some("偶数")
+
+    println!("{:?}", double_even(2));
+
+    match double_even(3) {
+        Ok(v) => println!("{}", v),
+        Err(err) => {
+            println!("mainでハンドリング");
+            println!("{}", err);
+        }
+    }
 }
