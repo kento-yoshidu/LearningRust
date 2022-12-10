@@ -6,9 +6,10 @@ mod my_derive;
 mod my_generics;
 mod my_error_handling;
 mod my_clojure;
+mod iterator;
 */
 
-mod iterator;
+mod my_vec;
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
@@ -53,7 +54,9 @@ fn main() {
     my_error_handling::run();
 
     my_clojure::run();
-    */
 
     iterator::run();
+    */
+
+    my_vec::run();
 }
