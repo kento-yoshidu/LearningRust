@@ -38,4 +38,24 @@ pub fn run() {
     println!("{:?}", c.next());
     println!("{:?}", c.next());
     println!("{:?}", c.next());
+
+    let v = vec![1, 2, 3, 4, 5];
+
+    // ベクターをイテレーターに変換
+    let m = v.iter().map(|x| x * 2);
+
+    for val in m {
+        println!("{}", val);
+    }
+
+    // コレクションに変換
+    let c: Vec<_> = v.iter().map(|x| x * 2).collect();
+
+    println!("{:?}", c);
+
+    let f: Vec<_> = v.iter().filter(|x| *x % 2 == 0).collect();
+
+    for fil in f {
+        println!("{}", fil);
+    }
 }
