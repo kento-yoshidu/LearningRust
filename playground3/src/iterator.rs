@@ -58,4 +58,24 @@ pub fn run() {
     for fil in f {
         println!("{}", fil);
     }
+
+    let c =  v.iter().count();
+    let s: i32 = v.iter().sum();
+    let p: i32 = v.iter().product();
+
+    println!("{}, {}, {}", c, s, p);
+
+    let max = v.iter().max();
+    let min = v.iter().min();
+
+    println!("{:?}, {:?}", max, min);
+
+    let s = v.iter().fold(0, |sum, x| sum + x);
+
+    println!("{}", s);
+
+    let s = v.iter().fold(1, |sum, x| sum * x);
+
+    println!("{}", s);
 }
+
