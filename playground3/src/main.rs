@@ -8,9 +8,10 @@ mod my_error_handling;
 mod my_clojure;
 mod iterator;
 mod my_vec;
+mod my_queue;
 */
 
-mod my_queue;
+mod my_map;
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
@@ -59,7 +60,9 @@ fn main() {
     iterator::run();
 
     my_vec::run();
-    */
 
     my_queue::run();
+    */
+
+    my_map::run();
 }
