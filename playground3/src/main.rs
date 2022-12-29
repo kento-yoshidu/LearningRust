@@ -9,9 +9,9 @@ mod my_clojure;
 mod iterator;
 mod my_vec;
 mod my_queue;
-*/
 
 mod my_map;
+
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
     if y == 0 {
@@ -30,6 +30,34 @@ fn func_ex_print_result<T: std::fmt::Display, E: std::fmt::Display>(ans: Result<
 
 // mod fizzbuzz;
 // mod ownership;
+
+#[test]
+fn test_sample() {
+    let a = 1 + 1;
+    let b = 2;
+
+    assert_eq!(a, b);
+    assert_ne!(a, 3);
+}
+*/
+
+fn maybe_panic(flag: bool) {
+    if flag == false {
+        println!("sage!");
+        panic!("dummy");
+    } else {
+        panic!("flag is true!!");
+    }
+}
+
+#[cfg(test)]
+mod test_module {
+    #[test]
+    #[should_panic(expected="flag is true")]
+    fn test_maybe_panic() {
+        super::maybe_panic(true);
+    }
+}
 
 fn main() {
     /*
@@ -62,7 +90,7 @@ fn main() {
     my_vec::run();
 
     my_queue::run();
-    */
 
     my_map::run();
+    */
 }

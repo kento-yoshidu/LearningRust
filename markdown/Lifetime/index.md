@@ -34,6 +34,20 @@ https://zenn.dev/ucwork/articles/6de5c9c2257f2d
 
 ## ライフタイムパラメーター
 
+以下の場所に書くことができる。
+
+```rs
+&'a T
+&'a mut T
+T<'a>
+```
+
+以下のように明示的に指定する。
+
+```rs
+let a = 'a b;
+```
+
 ```rs
 fn longest(x: &String, y: &String) -> &String {
     if x.len() > y.len() {
