@@ -1,3 +1,10 @@
+use std::env;
+use std::io;
+use std::fs::File;
+use std::io::prelude::*;
+use std::fs;
+use std::io::BufReader;
+
 /*
 mod option;
 mod test_module;
@@ -92,5 +99,42 @@ fn main() {
     my_queue::run();
 
     my_map::run();
+
+    let args: Vec<String> = env::args().collect();
+
+    println!("{:?}", args)
+
+    println!("文字列を入力してください。");
+    let mut input = String::new();
+
+
+    println!("{:?}", input);
+    let mut input = String::new();
+
+    io::stdin().read_line(&mut input).unwrap();
+
+    let num: i32 = input.trim().parse().unwrap();
+
+    println!("{}", num * 10);
     */
+
+    let mut f = File::open("src/sample1.txt").unwrap();
+    let mut contents = String::new();
+
+    f.read_to_string(&mut contents).unwrap();
+
+
+    print!("{}", contents);
+
+    let con = fs::read_to_string("src/sample1.txt").unwrap();
+
+    println!("{}", con);
+
+    let mut buffer_reader = BufReader::new(f);
+    let mut line = String::new();
+    buffer_reader.read_line(&mut line).unwrap();
+
+    println!("{}", line);
+    println!("{}", line);
+    println!("{}", line);
 }
