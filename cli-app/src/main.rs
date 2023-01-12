@@ -1,4 +1,5 @@
 use std::io;
+use app::services;
 
 fn main() {
     let mut service_type = String::new();
@@ -8,7 +9,7 @@ fn main() {
     // 改行コードや余分なスペースを取り除き、u8型に変換
     let service_type: u8 = service_type.trim().parse().expect("数値で入力してください。");
 
-    // 入力値のバリデーション
+    services::validate::InputValidator::validate_service_type(service_type);
 
     if service_type == 0 {
         print!("登録サービス");
