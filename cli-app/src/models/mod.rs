@@ -23,6 +23,7 @@ pub enum Category {
     Expense(ExpensiveCategory)
 }
 
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct Item {
     name: String,
     category: Category,
