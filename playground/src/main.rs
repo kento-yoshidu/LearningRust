@@ -2,7 +2,7 @@
 // mod box_test;
 // mod ownership;
 // mod generics;
-// mod leifttime;
+// mod lifetime;
 // mod structs;
 // mod enums;
 // mod traits;
@@ -117,6 +117,4 @@ fn main() {
     // traits::run();
 
     // error_handling::run();
-
-    samplehoge::run();
 }

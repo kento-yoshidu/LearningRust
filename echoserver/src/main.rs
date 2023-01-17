@@ -11,4 +11,4 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn echo_server(address: &str)
+fn echo_server(address: &str) {}
