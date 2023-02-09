@@ -1,4 +1,5 @@
 use std::{thread, time};
+use getch_rs::{Getch, Key};
 
 #[derive(Clone, Copy)]
 enum PieceKind {
@@ -52,10 +53,10 @@ struct Position {
     y: usize,
 }
 
-fn is_collision(field: &[[usize;14]], pos: &Position, piece: PieceKind) -> bool {
+fn is_collision(field: &[[usize;14]], position: &Position, piece: PieceKind) -> bool {
     for y in 0..4 {
         for x in 0..4 {
-            if field[y+pos.y+1][x+pos.x] & PIECE[piece as usize][y][x] == 1 {
+            if field[y+position.y][x+position.x] & PIECE[piece as usize][y][x] == 1 {
                 return true;
             }
         }
@@ -98,15 +99,22 @@ fn main() {
         y: 0,
     };
 
+    let g = Getch::new();
+
     // 画面クリア
     println!("\x1b[2J\x1b[H\x1b[?25l");
 
-    for _ in 0..30 {
+    // for _ in 0..30 {
+    loop {
         let mut field_buf = field;
 
-        if !is_collision(&field, &position, PieceKind::I) {
-             // posのy座標を更新
-            position.y += 1;
+        let new_position = Position {
+            x: position.x,
+            y: position.y + 1,
+        };
+
+        if !is_collision(&field, &new_position, PieceKind::I) {
+            position = new_position;
         }
 
         for y in 0..4 {
@@ -137,6 +145,22 @@ fn main() {
             println!();
         }
         thread::sleep(time::Duration::from_millis(300));
+
+        match g.getch() {
+            Ok(Key::Char('q')) => break,
+            Ok(Key::Down) => {
+                let new_position = Position {
+                    x: position.x,
+                    y: position.y + 1,
+                };
+
+                if !is_collision(&field, &new_position, PieceKind::I) {
+                    // posの座標を更新
+                    position = new_position;
+                }
+            }
+             _ => (),  // 何もしない
+        }
     }
     // カーソルを再表示
     println!("\x1b[?25h");
