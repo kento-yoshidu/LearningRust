@@ -52,6 +52,17 @@ struct Position {
     y: usize,
 }
 
+fn is_collision(field: &[[usize;14]], pos: &Position, piece: PieceKind) -> bool {
+    for y in 0..4 {
+        for x in 0..4 {
+            if field[y+pos.y+1][x+pos.x] & PIECE[piece as usize][y][x] == 1 {
+                return true;
+            }
+        }
+    }
+    false
+}
+
 fn main() {
     let field = [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -82,10 +93,6 @@ fn main() {
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     ];
 
-
-    /*
-    */
-
     let mut position = Position {
         x: 4,
         y: 0,
@@ -94,8 +101,13 @@ fn main() {
     // 画面クリア
     println!("\x1b[2J\x1b[H\x1b[?25l");
 
-    for _ in 0..5 {
+    for _ in 0..30 {
         let mut field_buf = field;
+
+        if !is_collision(&field, &position, PieceKind::I) {
+             // posのy座標を更新
+            position.y += 1;
+        }
 
         for y in 0..4 {
             for x in 0..4 {
@@ -103,7 +115,7 @@ fn main() {
             }
         }
 
-        position.y += 1;
+        // position.y += 1;
         println!("\x1b[H");  // カーソルを先頭に移動
 
         for y in 0..26 {
@@ -124,7 +136,7 @@ fn main() {
             }
             println!();
         }
-        thread::sleep(time::Duration::from_millis(1000));
+        thread::sleep(time::Duration::from_millis(300));
     }
     // カーソルを再表示
     println!("\x1b[?25h");
