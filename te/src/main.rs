@@ -110,7 +110,7 @@ fn main() {
 
         let new_position = Position {
             x: position.x,
-            y: position.y + 1,
+            y: position.y,
         };
 
         if !is_collision(&field, &new_position, PieceKind::I) {
@@ -119,7 +119,9 @@ fn main() {
 
         for y in 0..4 {
             for x in 0..4 {
-                field_buf[y+position.y][x+position.x] |= PIECE[PieceKind::I as usize][y][x];
+                if PIECE[PieceKind::I as usize][y][x] == 1 {
+                    field_buf[y+position.y][x+position.x] = 1;
+                }
             }
         }
 
@@ -144,22 +146,44 @@ fn main() {
             }
             println!();
         }
-        thread::sleep(time::Duration::from_millis(300));
+        thread::sleep(time::Duration::from_millis(10));
 
         match g.getch() {
             Ok(Key::Char('q')) => break,
-            Ok(Key::Down) => {
+            Ok(Key::Char('j')) => {
                 let new_position = Position {
                     x: position.x,
                     y: position.y + 1,
                 };
 
+                // 衝突しなかったらposの座標を更新
                 if !is_collision(&field, &new_position, PieceKind::I) {
-                    // posの座標を更新
                     position = new_position;
                 }
-            }
-             _ => (),  // 何もしない
+            },
+            Ok(Key::Char('h')) => {
+                let new_position = Position {
+                    x: position.x-1,
+                    y: position.y,
+                };
+
+                // 衝突しなかったらposの座標を更新
+                if !is_collision(&field, &new_position, PieceKind::I) {
+                    position = new_position;
+                }
+            },
+            Ok(Key::Char('l')) => {
+                let new_position = Position {
+                    x: position.x+1,
+                    y: position.y
+                };
+
+                // 衝突しなかったらposの座標を更新
+                if !is_collision(&field, &new_position, PieceKind::I) {
+                    position = new_position;
+                }
+            },
+            _ => (),  // 何もしない
         }
     }
     // カーソルを再表示
