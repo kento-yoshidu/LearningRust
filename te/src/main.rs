@@ -1,51 +1,69 @@
 use std::{thread, time};
 use getch_rs::{Getch, Key};
 
-#[derive(Clone, Copy)]
-enum PieceKind {
+// ブロックの種類
+enum BlockKind {
     I,
     O,
-    T,
+    S,
+    Z,
     J,
     L,
+    T,
 }
 
-const PIECE: [[[usize; 4]; 4]; 5] = [
-    // I
+// ブロックの形状
+type BlockShape = [[usize; 4]; 4];
+const BLOCKS: [BlockShape; 7] = [
+    // Iブロック
     [
         [0,0,0,0],
         [0,0,0,0],
         [1,1,1,1],
-        [0,0,0,0]
+        [0,0,0,0],
     ],
-    // 四角
+    // Oブロック
     [
         [0,0,0,0],
         [0,1,1,0],
         [0,1,1,0],
-        [0,0,0,0]
+        [0,0,0,0],
     ],
-    // 凸型
+    // Sブロック
     [
         [0,0,0,0],
+        [0,1,1,0],
+        [1,1,0,0],
         [0,0,0,0],
-        [0,1,0,0],
-        [1,1,1,0]
     ],
-    // J型
+    // Zブロック
+    [
+        [0,0,0,0],
+        [1,1,0,0],
+        [0,1,1,0],
+        [0,0,0,0],
+    ],
+    // Jブロック
     [
         [0,0,0,0],
         [1,0,0,0],
         [1,1,1,0],
-        [0,0,0,0]
+        [0,0,0,0],
     ],
-    // L型
+    // Lブロック
     [
         [0,0,0,0],
         [0,0,1,0],
         [1,1,1,0],
-        [0,0,0,0]
-    ]
+        [0,0,0,0],
+    ],
+    // Tブロック
+    [
+        [0,0,0,0],
+        [0,1,0,0],
+        [1,1,1,0],
+        [0,0,0,0],
+    ],
 ];
 
 struct Position {
@@ -53,138 +71,64 @@ struct Position {
     y: usize,
 }
 
-fn is_collision(field: &[[usize;14]], position: &Position, piece: PieceKind) -> bool {
-    for y in 0..4 {
-        for x in 0..4 {
-            if field[y+position.y][x+position.x] & PIECE[piece as usize][y][x] == 1 {
-                return true;
-            }
-        }
-    }
-    false
-}
-
 fn main() {
     let field = [
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1],
     ];
 
-    let mut position = Position {
-        x: 4,
-        y: 0,
-    };
-
-    let g = Getch::new();
+    let mut pos = Position { x: 4, y: 0 };
 
     // 画面クリア
     println!("\x1b[2J\x1b[H\x1b[?25l");
 
-    // for _ in 0..30 {
-    loop {
+    for _ in 0..5 {
+        // 描画用フィールドの生成
         let mut field_buf = field;
 
-        let new_position = Position {
-            x: position.x,
-            y: position.y,
-        };
-
-        if !is_collision(&field, &new_position, PieceKind::I) {
-            position = new_position;
-        }
-
+        // 描画用フィールドにブロックの情報を書き込む
         for y in 0..4 {
             for x in 0..4 {
-                if PIECE[PieceKind::I as usize][y][x] == 1 {
-                    field_buf[y+position.y][x+position.x] = 1;
+                if BLOCKS[BlockKind::I as usize][y][x] == 1 {
+                    field_buf[y+pos.y][x+pos.x] = 1;
                 }
             }
         }
 
-        // position.y += 1;
+        pos.y += 1;
         println!("\x1b[H");  // カーソルを先頭に移動
 
-        for y in 0..26 {
-            for x in 0..14 {
+        for y in 0..21 {
+            for x in 0..13 {
                 if field_buf[y][x] == 1 {
-                    if x == 0 || x == 13 {
-                        print!("|");
-                    } else if y == 0 {
-                        print!("~~");
-                    } else if y == 25 {
-                        print!("__");
-                    } else {
-                        print!(" ■");
-                    }
+                    print!("[]");
                 } else {
-                    print!("  ");
+                    print!(" .")
                 }
             }
             println!();
         }
-        thread::sleep(time::Duration::from_millis(10));
-
-        match g.getch() {
-            Ok(Key::Char('q')) => break,
-            Ok(Key::Char('j')) => {
-                let new_position = Position {
-                    x: position.x,
-                    y: position.y + 1,
-                };
-
-                // 衝突しなかったらposの座標を更新
-                if !is_collision(&field, &new_position, PieceKind::I) {
-                    position = new_position;
-                }
-            },
-            Ok(Key::Char('h')) => {
-                let new_position = Position {
-                    x: position.x-1,
-                    y: position.y,
-                };
-
-                // 衝突しなかったらposの座標を更新
-                if !is_collision(&field, &new_position, PieceKind::I) {
-                    position = new_position;
-                }
-            },
-            Ok(Key::Char('l')) => {
-                let new_position = Position {
-                    x: position.x+1,
-                    y: position.y
-                };
-
-                // 衝突しなかったらposの座標を更新
-                if !is_collision(&field, &new_position, PieceKind::I) {
-                    position = new_position;
-                }
-            },
-            _ => (),  // 何もしない
-        }
+        // 1秒間スリーブする
+        thread::sleep(time::Duration::from_millis(1000));
     }
     // カーソルを再表示
     println!("\x1b[?25h");
