@@ -1,15 +1,33 @@
 use std::sync::{Arc, Mutex};
 use std::{thread, time};
 use getch_rs::{Getch, Key};
+use rand::{
+    distributions::{Distribution, Standard},
+    Rng,
+};
 
-fn draw(field: &Field, pos: &Position) {
+impl Distribution<BlockKind> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> BlockKind {
+        match rng.gen_range(0..=6) {
+            0 => BlockKind::I,
+            1 => BlockKind::O,
+            2 => BlockKind::S,
+            3 => BlockKind::Z,
+            4 => BlockKind::J,
+            5 => BlockKind::L,
+            _ => BlockKind::T,
+        }
+    }
+}
+
+fn draw(field: &Field, pos: &Position, block: BlockKind) {
     // 描画用フィールドの生成
     let mut field_buf = field.clone();
 
     // 描画用フィールドにブロックの情報を書き込む
     for y in 0..4 {
         for x in 0..4 {
-            if BLOCKS[BlockKind::I as usize][y][x] == 1 {
+            if BLOCKS[block as usize][y][x] == 1 {
                 field_buf[y+pos.y][x+pos.x] = 1;
             }
         }
@@ -119,7 +137,7 @@ fn is_collision(field: &Field, pos: &Position, block: BlockKind) -> bool {
 }
 
 fn main() {
-    let field = [
+    let field = Arc::new(Mutex::new([
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -141,34 +159,53 @@ fn main() {
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1],
-    ];
+    ]));
 
     let pos = Arc::new(Mutex::new(Position { x: 4, y: 0 }));
+    let block = Arc::new(Mutex::new(rand::random::<BlockKind>()));
 
     // 画面クリア
     println!("\x1b[2J\x1b[H\x1b[?25l");
 
     // フィールドを描画
-    draw(&field, &pos.lock().unwrap());
+    draw(&field.lock().unwrap(), &pos.lock().unwrap(), *block.lock().unwrap());
 
     {
         let pos = Arc::clone(&pos);
+        let field = Arc::clone(&field);
+        let block = Arc::clone(&block);
+
         let _ = thread::spawn(move || {
             loop {
                 // 1秒間スリーブする
                 thread::sleep(time::Duration::from_millis(800));
                 // 自然落下
                 let mut pos = pos.lock().unwrap();
+                let mut field = field.lock().unwrap();
+                let mut block = block.lock().unwrap();
+
                 let new_pos = Position {
                     x: pos.x,
                     y: pos.y + 1,
                 };
-                if !is_collision(&field, &new_pos, BlockKind::I) {
+                if !is_collision(&field, &new_pos, *block) {
                     // posの座標を更新
                     *pos = new_pos;
+                } else {
+                    // ブロックをフィールドに固定
+                    for y in 0..4 {
+                        for x in 0..4 {
+                            if BLOCKS[*block as usize][y][x] == 1 {
+                                field[y+pos.y][x+pos.x] = 1;
+                            }
+                        }
+                    }
+                    // posの座標を初期値へ
+                    *pos = Position { x: 4, y: 0 };
+                    *block = rand::random();
                 }
                 // フィールドを描画
-                draw(&field, &pos);
+                draw(&field, &pos, *block);
             }
         });
     }
@@ -179,44 +216,50 @@ fn main() {
         match g.getch() {
             Ok(Key::Char('h')) => {
                 let mut pos = pos.lock().unwrap();
+                let field = field.lock().unwrap();
+                let block = block.lock().unwrap();
                 let new_pos = Position {
                     x: pos.x - 1,
                     y: pos.y,
                 };
 
-                if !is_collision(&field, &new_pos, BlockKind::I) {
+                if !is_collision(&field, &new_pos, *block) {
                     // posの座標を更新
                     *pos = new_pos;
                 }
-                draw(&field, &pos);
+                draw(&field, &pos, *block);
             }
 
             Ok(Key::Char('j')) => {
                 let mut pos = pos.lock().unwrap();
+                let field = field.lock().unwrap();
+                let block = block.lock().unwrap();
                 let new_pos = Position {
                     x: pos.x,
                     // y: pos.y + 1,
                     y: pos.y + 1,
                 };
-                if !is_collision(&field, &new_pos, BlockKind::I) {
+                if !is_collision(&field, &new_pos, *block) {
                     // posの座標を更新
                     *pos = new_pos;
                 }
-                draw(&field, &pos);
+                draw(&field, &pos, *block);
             }
 
             Ok(Key::Char('l')) => {
                 let mut pos = pos.lock().unwrap();
+                let field = field.lock().unwrap();
+                let block = block.lock().unwrap();
                 let new_pos = Position {
                     x: pos.x + 1,
                     y: pos.y,
                 };
 
-                if !is_collision(&field, &new_pos, BlockKind::I) {
+                if !is_collision(&field, &new_pos, *block) {
                     // posの座標を更新
                     *pos = new_pos;
                 }
-                draw(&field, &pos);
+                draw(&field, &pos, *block);
             }
 
             Ok(Key::Char('q')) => {
