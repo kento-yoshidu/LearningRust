@@ -128,6 +128,9 @@ struct Position {
 fn is_collision(field: &Field, pos: &Position, block: BlockKind) -> bool {
     for y in 0..4 {
         for x in 0..4 {
+            if y+pos.y >= FIELD_HEIGHT || x+pos.x >= FIELD_WIDTH {
+                continue;
+            }
             if field[y+pos.y][x+pos.x] & BLOCKS[block as usize][y][x] == 1 {
                 return true;
             }
@@ -200,6 +203,23 @@ fn main() {
                             }
                         }
                     }
+
+                    // ラインの削除処理
+                    for y in 1..FIELD_HEIGHT-1 {
+                        let mut can_erase = true;
+                        for x in 1..FIELD_WIDTH-1 {
+                            if field[y][x] == 0 {
+                                can_erase = false;
+                                break;
+                            }
+                        }
+                        if can_erase {
+                            for y2 in (2..=y).rev() {
+                                field[y2] = field[y2-1];
+                            }
+                        }
+                    }
+
                     // posの座標を初期値へ
                     *pos = Position { x: 4, y: 0 };
                     *block = rand::random();
@@ -219,7 +239,7 @@ fn main() {
                 let field = field.lock().unwrap();
                 let block = block.lock().unwrap();
                 let new_pos = Position {
-                    x: pos.x - 1,
+                    x: pos.x.checked_sub(1).unwrap_or_else(|| pos.x),
                     y: pos.y,
                 };
 
