@@ -3,5 +3,5 @@ mod interpreter;
 use interpreter::lexer;
 
 fn main() {
-    println!("{:?}", lexer::test());
+    lexer::break_down_into_token("(");
 }
