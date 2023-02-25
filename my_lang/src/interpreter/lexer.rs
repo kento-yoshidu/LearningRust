@@ -1,10 +1,10 @@
 use regex::Regex;
 
 #[derive(Debug, PartialEq, Clone)]
-enum Token {
-    echo,
-    Number(f64),
-    Plus,
+pub enum Token {
+    // echo,
+    // Number(f64),
+    // Plus,
     LParen,
     RParen
 }
@@ -29,22 +29,32 @@ impl Lexer {
         self.string.get(self.position)
     }
 
-    /*
+    // 文字列をトークンに分解する
     fn token(&mut self) -> Option<Token> {
-        let current = self.current()?;
+        let current = self.current();
+
+        let token = match current {
+            Some(&'(') => Some(Token::LParen),
+            Some(&')') => Some(Token::RParen),
+            _ => None
+        };
+
+        return token;
     }
-    */
 }
 
-pub fn test() {
-    let mut lexer = Lexer::new("Hello World".chars().collect());
+pub fn break_down_into_token(arg: &str) -> Option<Token> {
+    let mut lexer = Lexer::new(arg.chars().collect());
 
-    let current = lexer.current();
+    let token = lexer.token();
 
-    println!("{:?}", current);
+    println!("{:?}", token);
+
+    token
 }
 
 // 文字列をトークンに分解する
+/*
 pub fn break_down_into_token(arg: &str) -> Vec<&str> {
     let reg = Regex::new(r"print|(|)").unwrap();
 
@@ -52,14 +62,16 @@ pub fn break_down_into_token(arg: &str) -> Vec<&str> {
 
     vec
 }
+*/
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test() {
-        let a1 = vec!["Hello", "World"];
-        assert_eq!(a1, break_down_into_token("Hello,World"));
+    fn test1() {
+        assert_eq!(Some(Token::LParen), break_down_into_token("("));
+        assert_eq!(Some(Token::RParen), break_down_into_token(")"));
+        assert_eq!(None, break_down_into_token("Hello World"));
     }
 }
