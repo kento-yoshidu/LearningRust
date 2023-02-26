@@ -1,5 +1,3 @@
-use regex::Regex;
-
 #[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     // echo,
@@ -10,27 +8,24 @@ pub enum Token {
 }
 
 #[derive(Debug)]
-struct Lexer {
+pub struct Lexer {
+    // 入力された文字列
     string: Vec<char>,
+    // 現在解析している位置
     position: usize,
 }
 
 impl Lexer {
     // 初期化
-    fn new(string: Vec<char>) -> Self {
+    pub fn new(string: Vec<char>) -> Self {
         Self {
             string,
             position: 0
         }
     }
 
-    // 現在解析中の文字
-    fn current(&mut self) -> Option<&char> {
-        self.string.get(self.position)
-    }
-
     // 文字列をトークンに分解する
-    fn token(&mut self) -> Option<Token> {
+    pub fn token(&mut self) -> Option<Token> {
         let current = self.current();
 
         let token = match current {
@@ -39,18 +34,39 @@ impl Lexer {
             _ => None
         };
 
+        self.next();
         return token;
+    }
+
+    // 現在解析中の文字
+    fn current(&mut self) -> Option<&char> {
+        self.string.get(self.position)
+    }
+
+    // 位置を一つ次に進める
+    fn next(&mut self) {
+        self.position += 1;
     }
 }
 
-pub fn break_down_into_token(arg: &str) -> Option<Token> {
+pub fn break_down_into_token(arg: &str) /*-> Option<Token>*/ {
     let mut lexer = Lexer::new(arg.chars().collect());
 
-    let token = lexer.token();
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
+    println!("{:?}", lexer.token());
 
-    println!("{:?}", token);
-
-    token
+    // lexer
 }
 
 // 文字列をトークンに分解する

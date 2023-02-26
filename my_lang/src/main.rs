@@ -3,5 +3,5 @@ mod interpreter;
 use interpreter::lexer;
 
 fn main() {
-    lexer::break_down_into_token("(");
+    lexer::break_down_into_token("(Hello World)");
 }
