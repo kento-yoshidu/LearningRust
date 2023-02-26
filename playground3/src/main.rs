@@ -8,7 +8,10 @@ use std::io::BufReader;
 /*
 mod option;
 mod test_module;
+*/
+
 mod my_trait;
+/*
 mod my_derive;
 mod my_generics;
 mod my_error_handling;
@@ -46,7 +49,6 @@ fn test_sample() {
     assert_eq!(a, b);
     assert_ne!(a, 3);
 }
-*/
 
 fn maybe_panic(flag: bool) {
     if flag == false {
@@ -65,6 +67,7 @@ mod test_module {
         super::maybe_panic(true);
     }
 }
+*/
 
 fn main() {
     /*
@@ -116,7 +119,6 @@ fn main() {
     let num: i32 = input.trim().parse().unwrap();
 
     println!("{}", num * 10);
-    */
 
     let mut f = File::open("src/sample1.txt").unwrap();
     let mut contents = String::new();
@@ -137,4 +139,7 @@ fn main() {
     println!("{}", line);
     println!("{}", line);
     println!("{}", line);
+    */
+
+    my_trait::run();
 }
