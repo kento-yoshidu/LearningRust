@@ -1,30 +1,31 @@
-// mod stack_heap;
-// mod box_test;
-// mod ownership;
-// mod generics;
-// mod lifetime;
-// mod structs;
-// mod enums;
-// mod traits;
-// mod error_handling;
-// mod unit_test;
+mod my_type;
 
 fn main() {
+    let i = 1;
+    let i2 = 2;
+
+    println!("1: 変数iのスタック上のアドレス : {:p}", &i);
+    println!("2: 変数i2のスタック上のアドレス : {:p}", &i2);
+
+    let f: f64 = 1.0;
+    let f2: f64 = 2.0;
+
+    println!("3: 変数fのスタック上のアドレス : {:p}", &f);
+    println!("4: 変数fのスタック上のアドレス : {:p}", &f2);
+
+    println!("\n --- ベクター --- \n");
+
+    my_type::vec::run();
+
+    println!("\n --- 文字列スライス --- \n");
+
+    my_type::str::run();
+
+    println!("\n --- String --- \n");
+
+    my_type::string::run();
+
     /*
-    println!("Hello, world!");
-    
-    let mut x = 3;
-    println!("{}", x);
-    //=> 3
-
-    x = 6;
-    println!("{}", x);
-    //=> 6
-
-    const MAX_COUNT: i32 = 100;
-
-    println!("{:p}", &MAX_COUNT);
-
     let i2: i64 = 1;
     let i3: i64 = 2;
 
