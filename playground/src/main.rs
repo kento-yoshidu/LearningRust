@@ -13,6 +13,17 @@ fn main() {
     println!("3: 変数fのスタック上のアドレス : {:p}", &f);
     println!("4: 変数fのスタック上のアドレス : {:p}", &f2);
 
+
+    let arr = [1, 3, 5];
+
+    for (index, num) in arr.iter().enumerate() {
+        println!("5: 配列arrの{}番目の値 {}", index + 1 , num);
+    };
+
+    println!("6: 配列arrの1番目の値のスタックアドレス {:p}", &arr[0]);
+    println!("6: 配列arrの2番目の値のスタックアドレス {:p}", &arr[1]);
+    println!("6: 配列arrの3番目の値のスタックアドレス {:p}", &arr[2]);
+
     println!("\n --- ベクター --- \n");
 
     my_type::vec::run();
