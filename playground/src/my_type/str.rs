@@ -17,9 +17,6 @@ pub fn run() {
 
     println!("3: str2のスタックアドレス {:p}", &str2);
     println!("3: str3のスタックアドレス {:p}", &str3);
-    //=> 3: str2のスタックアドレス 0x6d4cbcf6f8
-    //=> 3: str3のスタックアドレス 0x6d4cbcf708
-    // 0x708 - 0x6f8 = 10進数で16
 
     println!("4: str2の静的領域の先頭アドレス {:p}", str2.as_ptr());
     println!("4: str2の静的領域のバイト数 {}", str2.len());
