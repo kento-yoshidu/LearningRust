@@ -36,6 +36,10 @@ fn main() {
 
     my_type::string::run();
 
+    println!("\n --- 構造体 --- \n");
+
+    my_type::structs::run();
+
     /*
     let i2: i64 = 1;
     let i3: i64 = 2;
