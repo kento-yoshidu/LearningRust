@@ -40,6 +40,10 @@ fn main() {
 
     my_type::structs::run();
 
+    println!("\n --- 列挙体 --- \n");
+
+    my_type::_enum::run();
+
     /*
     let i2: i64 = 1;
     let i3: i64 = 2;
