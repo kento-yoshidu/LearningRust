@@ -22,6 +22,13 @@ impl Person {
     }
 }
 
+// 構造体のフィールドに構造体を指定することができる
+#[derive(Debug)]
+struct Parents {
+    father: Person,
+    mother: Person,
+}
+
 pub fn run() {
     // Person構造体のインスタンスを生成する
     let p1 = Person {
@@ -68,4 +75,17 @@ pub fn run() {
     // メソッドには.でアクセスする
     p4.greeting();
 
+    // 構造体はCopyトレイトが実装されていないため、ムーブセマンティクスが適用される
+
+    let p5 = Person { name: String::from("kento"), age: 35 };
+
+    // p5の所有権はparentのfatherフィールドに移動している
+    let parent = Parents {
+        father: p5,
+        mother: Person { name: String::from("yasuko") , age: 35 }
+    };
+
+    println!("parentインスタンスの値 {:?}", parent);
+
+    // println!("{:?}", p5);
 }
