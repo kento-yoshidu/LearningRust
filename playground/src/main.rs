@@ -1,6 +1,8 @@
 mod my_type;
+mod my_error_handling;
 
 fn main() {
+    /*
     let i = 1;
     let i2 = 2;
 
@@ -43,6 +45,12 @@ fn main() {
     println!("\n --- 列挙体 --- \n");
 
     my_type::_enum::run();
+    */
+
+    println!("\n --- Result型 --- \n");
+
+    my_error_handling::my_result::run();
+
 
     /*
     let i2: i64 = 1;
