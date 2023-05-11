@@ -1,3 +1,4 @@
+/*
 use thiserror::Error;
 
 fn func_ex_div_result(x: i32, y: i32) -> Result<i32, &'static str> {
@@ -14,6 +15,7 @@ fn func_ex_print_result<T: std::fmt::Display, E: std::fmt::Display>(ans: Result<
         Err(str) => println!("{}", str)
     }
 }
+*/
 
 #[derive(Error, Debug)]
 enum DivError {
@@ -94,4 +96,45 @@ pub fn run() {
     print_repeat_mydiv(repeat_mydiv(&[(2, 1), (-6, -3), (5, 2)]));
 
     print_repeat_mydiv(repeat_mydiv(&[(2, 1), (-6, 0), (6, 3)]));
+}
+// 独自エラー
+#[derive(Debug)]
+enum NotBuyError {
+    NotHandledFruits,
+    SouldOutFruits,
+}
+
+// OddError::FoundOdd が println!() で参照されたときに出力する文字列を定義する
+impl std::fmt::Display for NotBuyError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            NotBuyError::NotHandledFruits => write!(f, "その商品は取り扱いがありません"),
+            NotBuyError::SouldOutFruits => write!(f, "その商品は売り切れました")
+        }
+    }
+}
+
+// 配列に奇数が含まれていたらエラーを発生させる
+fn check_odd_digits(item: &str) -> Result<&str, NotBuyError> {
+    if item == "Apple" {
+        return Err(NotBuyError::NotHandledFruits)
+    }
+    Ok(item)
+}
+
+/*
+fn buy_fruits(fruit: %str) => Result<String, NotHandledFruits> {
+    match
+}
+*/
+
+fn run() {
+    /* 独自のエラー型を定義する */
+    // これまではErr("エラーメッセージ")という感じでしたが、独自に拡張してバリエーションを持たせます
+    let result = check_odd_digits("Apple");
+
+    match result {
+        Err(err) => println!("{}", err),
+        Ok(ok) => println!("{}", ok),
+    }
 }

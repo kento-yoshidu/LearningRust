@@ -23,45 +23,7 @@ enum NotHandledFruits {
     Apple
 }
 
-// 独自エラー
-#[derive(Debug)]
-enum NotBuyError {
-    NotHandledFruits,
-    SouldOutFruits,
-}
-
-// OddError::FoundOdd が println!() で参照されたときに出力する文字列を定義する
-impl std::fmt::Display for NotBuyError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            NotBuyError::NotHandledFruits => write!(f, "その商品は取り扱いがありません"),
-            NotBuyError::SouldOutFruits => write!(f, "その商品は売り切れました")
-        }
-    }
-}
-
-// 配列に奇数が含まれていたらエラーを発生させる
-fn check_odd_digits(item: &str) -> Result<&str, NotBuyError> {
-    if item == "Apple" {
-        return Err(NotBuyError::NotHandledFruits)
-    }
-    Ok(item)
-}
-
-/*
-fn buy_fruits(fruit: %str) => Result<String, NotHandledFruits> {
-    match
-}
-*/
-
 pub fn run() {
-    let result = check_odd_digits("Apple");
-
-    match result {
-        Err(err) => println!("{}", err),
-        Ok(ok) => println!("{}", ok),
-    }
-
     // 0除算でパニックになる
     //println!("{}", devide(100, 0));
 
@@ -88,21 +50,4 @@ pub fn run() {
         //=> call_devide2の呼び出しの結果 Err 0除算エラーです
     }
 
-    /*
-    /* 独自のエラー型を定義する */
-    // これまではErr("エラーメッセージ")という感じでしたが、独自に拡張してバリエーションを持たせます
-
-    // 様々なメソッド
-    // unwrapで値を取り出すことができる
-
-    println!("{}", devide2(100, 50).unwrap());
-
-    //=> 0除算エラーです
-
-    // Errを受け取るとpanicになる
-
-    println!("{}", devide2(100, 0).unwrap());
-
-    //=> 2
-    */
 }
