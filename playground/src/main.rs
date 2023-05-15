@@ -1,4 +1,5 @@
 mod my_type;
+mod my_result;
 mod my_error_handling;
 
 fn main() {
@@ -49,8 +50,11 @@ fn main() {
 
     println!("\n --- Result型 --- \n");
 
-    my_error_handling::my_result::run();
+    my_result::my_result::run();
 
+    println!("\n --- エラーハンドリング --- \n");
+
+    my_error_handling::my_if_let::run();
 
     /*
     let i2: i64 = 1;
