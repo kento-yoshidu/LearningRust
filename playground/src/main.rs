@@ -1,6 +1,7 @@
 mod my_type;
 mod my_result;
 mod my_error_handling;
+mod other;
 
 fn main() {
     /*
@@ -56,6 +57,9 @@ fn main() {
 
     my_error_handling::my_if_let::run();
 
+    println!("\n --- その他 --- \n");
+
+    other::my_attribute::run();
     /*
     let i2: i64 = 1;
     let i3: i64 = 2;
