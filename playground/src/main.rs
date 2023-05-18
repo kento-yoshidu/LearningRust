@@ -1,6 +1,7 @@
 mod my_type;
 mod my_result;
 mod my_error_handling;
+mod my_iterator;
 mod other;
 
 fn main() {
@@ -56,6 +57,10 @@ fn main() {
     println!("\n --- エラーハンドリング --- \n");
 
     my_error_handling::my_if_let::run();
+
+    println!("\n --- イテレーター --- \n");
+
+    my_iterator::my_iterator::run();
 
     println!("\n --- その他 --- \n");
 
