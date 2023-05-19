@@ -61,6 +61,7 @@ fn main() {
     println!("\n --- イテレーター --- \n");
 
     my_iterator::my_iterator::run();
+    my_iterator::my_iterator_2::run();
 
     println!("\n --- その他 --- \n");
 
