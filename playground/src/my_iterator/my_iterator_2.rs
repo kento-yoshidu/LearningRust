@@ -1,22 +1,121 @@
-use itertools::{Itertools, MinMaxResult};
 
-pub fn run() {
+use itertools::{Itertools};
+
+fn main() {
+    /* 中身を取り出すメソッド */
+
     /* next */
     // 次の要素をSome<T>で返す
     // なければNoneを返す
-    let vec1 = [1, 2, 3];
+    let vec = [1, 2, 3];
 
-    let mut iter1 = vec1.iter();
+    let mut iter = vec.iter();
 
     // Some<i32>
-    println!("iter1.next() = {:?}", iter1.next());
-    //=> iter1.next() = Some(1)
-    println!("iter1.next() = {:?}", iter1.next());
-    //=> iter1.next() = Some(2)
-    println!("iter1.next() = {:?}", iter1.next());
-    //=> iter1.next() = Some(3)
-    println!("iter1.next() = {:?}\n", iter1.next());
-    //=> iter1.next() = None
+    println!("1: iter1.next() = {:?}", iter.next());
+    //=> 1: iter.next() = Some(1)
+    println!("1: iter1.next() = {:?}", iter.next());
+    //=> 1: iter.next() = Some(2)
+    println!("1: iter1.next() = {:?}", iter.next());
+    //=> 1: iter.next() = Some(3)
+    println!("1: iter1.next() = {:?}\n", iter.next());
+    //=> 1: iter.next() = None
+
+    /* last */
+    // 最後の要素をSome<T>で返す
+
+    let vec = [1, 2, 3];
+
+    let mut iter = vec.iter();
+
+    println!("2: iter.last = {:?}\n", iter.last());
+    //=> 2: iter.last = Some(3)
+
+    /* next_back */
+    // 🦀👀 最後から前へ辿れる?
+
+    let vec = [1, 2, 3];
+
+    let mut iter = vec.iter();
+
+    println!("3: iter.next_back = {:?}", iter.next_back());
+    //=> 3: iter.next_back = Some(3)
+    println!("3: iter.next_back = {:?}", iter.next_back());
+    //=> 3: iter.next_back = Some(2)
+    println!("3: iter.next_back = {:?}", iter.next_back());
+    //=> 3: iter.next_back = Some(1)
+    println!("3: iter.next_back = {:?}\n", iter.next());
+    //=> 3: iter.next_back = None
+
+    /* nth */
+    // n番目の要素をSome<T>で返す
+    let vec = [1, 2, 3];
+
+    println!("4: vecの3番目の値 = {:?}", vec.iter().nth(2));
+    //=> 4: vecの3番目の値 = Some(3)
+
+    // 存在しなければNoneを返す
+    println!("4: vecの10番目の値 = {:?}\n", vec.iter().nth(10));
+    //=> 4: vecの10番目の値 = None
+
+    /* find */
+    // 任意の関数を適用し、trueだったもののうち最初のものをSome(T)で返す
+    let vec = vec![9, 11, 12, 14];
+
+    // Some<i32>
+    println!("5: vecのうち2で割り切れる最初の要素 = {:?}\n", vec.iter().find(|&i| i % 2 == 0));
+    //=> 5: vecのうち2で割り切れる最初の要素 = Some(12)
+
+    /* maxとmin */
+    // Iterator<T>のうち最大 or 最小のものをOption<T>で返す
+    // TはOrdトレイトを実装している必要がある
+    let vec = vec![1, 2, 3, 4, 5];
+
+    // Some<i32>
+    println!("6: vecのうち最大の要素 = {:?}", vec.iter().max());
+    //=> 6: vecのうち最大の要素 = Some(5)
+    println!("6: vecのうち最小の要素 = {:?}\n", vec.iter().min());
+    //=> 6: vecのうち最小の要素 = Some(1)
+
+    /* max_byとmin_by */
+    /* 🦀❓ よく分からないから調べる
+    let vec10 = [1, 3, 5, 4, 2];
+
+    let mut iter10 = vec10.iter().max_by(|a, b| {
+        println!("a = {}", a);
+        println!("b = {}", b);
+        b.cmp(a)
+    });
+
+    println!("{:?}", iter10);
+    */
+
+    /* max_ny_keyとmin_by_key */
+    /* 🦀❓ よく分からないから調べる
+    // 任意の関数を適用し、値が最大 or 最小のものを返す
+    // こちらもTがOrdトレイトを実装している必要がある
+
+    let vec = [1, 2, 3, 4, 5];
+
+    // 2で割り切れる値の中で最大のものSome<i32>
+    println!("7: 2で割り切れる中で最大の値 = {:?}", vec.iter().max_by_key(|&x| x > &2));
+    //=> 7: 2で割り切れる中で最大の値 = Some(4)
+
+    // 2で割り切れる値の中で最大のものSome<i32>
+    println!("7: 2で割り切れる中で最小の値 = {:?}", vec.iter().min_by_key(|&x| x > &2));
+    //=> 7: 2で割り切れる中で最大の値 = Some(1)
+    */
+
+    /* find_map */
+    // 任意の関数を適用し、最初にSome<T>になったものだけを返す
+
+    let vec = vec!["1", "2", "a", "b", "c", "3"];
+
+    let mut iter = vec.iter().find_map(|x| x.parse::<i32>().ok());
+
+    // Some<i32>
+    println!("8: vecの中でi32に変換できるものの内、最初の要素 = {:?}\n", iter);
+    //=> 8: vecの中でi32に変換できるものの内、最初の要素 = Some(1)
 
     /* map */
     // 要素ごとに関数を適用する
@@ -54,6 +153,7 @@ pub fn run() {
 
     // i32に変換できたものだけを返す
     // .ok()でOptions型に変換する(初見殺し過ぎる)
+    // find_map()はSome<T>が返るが、これはIterator<T>が返る
     // Iterator<i32>
     let mut iter4 = vec4.iter().filter_map(|arg| arg.parse::<i32>().ok());
 
@@ -65,25 +165,6 @@ pub fn run() {
     //=> iter4 = Some(3)
     println!("iter4 = {:?}\n", iter4.next());
     //=> iter4 = None
-
-    /* find */
-    // 再処理trueだったもののうち最初のものをSome(T)で返す
-    let vec5 = vec![9, 11, 12, 14];
-
-    // Some<i32>
-    println!("vec5のうち2で割り切れる最初の要素 = {:?}\n", vec5.iter().find(|&i| i % 2 == 0));
-    //=> vec4のうち2で割り切れる最初の要素 = Some(12)
-
-    /* maxとmin */
-    // Iterator<T>のうち最大 or 最小のものをOption<T>で返す
-    // TはOrdトレイトを実装している必要がある
-    let vec5 = vec![1, 2, 3, 4, 5];
-
-    // Some<i32>
-    println!("vec5のうち最大の要素 = {:?}", vec5.iter().max());
-    //=> vec5のうち最大の要素 = Some(5)
-    println!("vec5のうち最小の要素 = {:?}\n", vec5.iter().min());
-    //=> vec5のうち最小の要素 = Some(1)
 
     // println!("{:?}")
 
@@ -109,7 +190,7 @@ pub fn run() {
     // iteratorの合計値を求める
     let vec7 = vec![1, 2, 3, 4, 5];
 
-    let mut iter7 = vec7.iter();
+    let iter7 = vec7.iter();
 
     // sumの戻り値には型注釈が必要
     println!("iter7にsumを適用 {}\n", iter7.sum::<i32>());
@@ -156,20 +237,6 @@ pub fn run() {
     println!("vec9の要素数 = {}\n", vec9.iter().count());
     //=> vec9の要素数 = 5
 
-    /* max_by */
-    // よく分からない
-    /*
-    let vec10 = [1, 3, 5, 4, 2];
-
-    let mut iter10 = vec10.iter().max_by(|a, b| {
-        println!("a = {}", a);
-        println!("b = {}", b);
-        b.cmp(a)
-    });
-
-    println!("{:?}", iter10);
-    */
-
     /* position_max */
     // 最大のものの位置(index)を返す
     let vec11 = [1, 3, 5, 4, 2];
@@ -201,7 +268,7 @@ pub fn run() {
     // 偶数を取り出し、それぞれを2倍して、その合計値を求める
     let vec = vec![1, 2, 3, 4, 5, 6, 7, 8];
 
-    let mut total: i32 = vec.iter()
+    let total: i32 = vec.iter()
                     .filter(|&x| x % 2 == 0)
                     .map(|&x| x * 2)
                     .sum();
@@ -211,4 +278,3 @@ pub fn run() {
 }
 
 // https://qiita.com/lo48576/items/34887794c146042aebf1
-
