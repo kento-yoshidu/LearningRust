@@ -3,14 +3,15 @@ mod my_type;
 mod my_result;
 mod my_error_handling;
 mod my_iterator;
+mod my_ownership;
 mod other;
 
 fn main() {
+    /*
     println!("\n --- 変数 --- \n");
 
     my_variable::my_variable::run();
 
-    /*
     println!("\n --- ベクター --- \n");
 
     my_type::vec::run();
@@ -48,4 +49,7 @@ fn main() {
 
     other::my_attribute::run();
     */
+
+    my_ownership::my_ownership::my_ownership();
+
 }
