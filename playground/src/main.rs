@@ -50,6 +50,10 @@ fn main() {
     other::my_attribute::run();
     */
 
+    other::my_default::run();
+
+    /*
     my_ownership::my_ownership::my_ownership();
+    */
 
 }
