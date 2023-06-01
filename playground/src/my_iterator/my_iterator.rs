@@ -1,6 +1,7 @@
 // イテレーターはIteratorトレイトを実装している
-
 // イテラブル = IntoIteratorを実装している型
+
+// iterableな型はinto_iterなどを通じてIteratorに変換できるだけで、iterable = Iteratorではない
 
 // std::iter::Iteratorは次の様に実装されている
 // nextメソッドはOption型を返す。次の値があればSome<T>を、無ければNoneを返す。
@@ -28,14 +29,69 @@ pub trait IntoIterator {
 //=> https://mmi.hatenablog.com/entry/2019/02/18/011231
 
 pub fn run() {
-    let mut range = 1..3;
+    // Rangeは直接Iteratorを実装している
+    let mut iter = 1..=3;
 
-    println!("{:?}", range.next());
+    println!("{:?}", iter.next());
     //=> Some(1)
-    println!("{:?}", range.next());
+    println!("{:?}", iter.next());
     //=> Some(2)
-    println!("{:?}", range.next());
+    println!("{:?}", iter.next());
+    //=> Some(3)
+    println!("{:?}", iter.next());
     //=> None
+
+    // なんでmutがいるの? → イテレーター自身を書き換えているから
+    // アドレスを出力すると同じ場所を指していることがわかる
+
+    let mut iter2 = 1..=3;
+
+    println!("iter2 = {:?}, address = {:p}", iter2, &iter2);
+    //=> iter2 = 1..=3, address = 0x7fffa62abd88
+
+    iter2.next();
+    println!("iter2 = {:?}, address = {:p}", iter2, &iter2);
+    //=> iter2 = 2..=3, address = 0x7fffa62abd88
+
+    iter2.next();
+    println!("iter2 = {:?}, address = {:p}", iter2, &iter2);
+    //=> iter2 = 3..=3, address = 0x7fffa62abd88
+    iter2.next();
+    println!("iter2 = {:?}, address = {:p}", iter2, &iter2);
+    //=> iter2 = 3..=3 (exhausted), address = 0x7fffa62abd88
+    //=> exhausted = 枯渇した、（容器が）空になった
+
+    // vecや配列はいかにもイテレーターっぽく見えるが、実際は違う（Iteratorトレイトを実装していない
+
+    // let vec = vec![1, 2, 3];
+    // vec.next();
+    // error[E0599]: no method named `next` found for struct `Vec<{integer}>` in the current scope
+
+    // let arr = [1, 2, 3];
+    // arr.next();
+    // error[E0599]: no method named `next` found for array `[{integer}; 3]` in the current scope
+
+    // for文で回せる
+
+    fn main() {
+        for i in 1..=3 {
+            println!("{}", i);
+            //=> 1
+            //=> 2
+            //=> 3
+        }
+    }
+
+    // Iteratorトレイトはmapを実装している
+
+    // mapでそれぞれの要素を2倍にし、collectでVecとして返す
+    let result: Vec<i32> = (1..=3).map(|i| i * 2).collect();
+
+    println!("{:?}", result);
+
+    /* Vec */
+
+
 
     let mut vec = vec![1, 2, 3];
 

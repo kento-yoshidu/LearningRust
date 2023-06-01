@@ -1,7 +1,11 @@
 
 use itertools::{Itertools};
 
-fn main() {
+pub fn run() {
+    /* Iteratorが実装しているメソッドを詳解する */
+
+    // Iteratorとは？
+
     /* 中身を取り出すメソッド */
 
     /* next */
