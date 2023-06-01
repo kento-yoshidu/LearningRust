@@ -41,6 +41,7 @@ fn main() {
     my_error_handling::my_if_let::run();
 
     println!("\n --- イテレーター --- \n");
+*/
 
     my_iterator::my_iterator::run();
     my_iterator::my_iterator_2::run();
@@ -48,12 +49,8 @@ fn main() {
     println!("\n --- その他 --- \n");
 
     other::my_attribute::run();
-    */
 
     other::my_default::run();
 
-    /*
     my_ownership::my_ownership::my_ownership();
-    */
-
 }
