@@ -14,6 +14,7 @@ struct User {
     last_name: String,
 }
 
+/*
 #[derive(Serialize, FromRow)]
 struct Article {
     id: i32,
@@ -27,11 +28,10 @@ pub struct CreateArticleBody {
     pub title: String,
     pub content: String,
 }
+*/
 
 #[get("/users")]
 pub async fn fetch_users(state: Data<AppState>) -> impl Responder {
-    // "GET /users".to_string()
-
     match sqlx::query_as::<_, User>("SELECT id, first_name, last_name FROM users")
         .fetch_all(&state.db)
         .await
@@ -41,6 +41,7 @@ pub async fn fetch_users(state: Data<AppState>) -> impl Responder {
     }
 }
 
+/*
 #[get("/users/{id}/articles")]
 pub async fn fetch_user_articles(state: Data<AppState>, path: Path<i32>) -> impl Responder {
     let id: i32 = path.into_inner();
@@ -76,3 +77,5 @@ pub async fn create_user_article(state: Data<AppState>, path: Path<i32>, body: J
         Err(_) => HttpResponse::InternalServerError().json("Failed to create user article"),
     }
 }
+*/
+
