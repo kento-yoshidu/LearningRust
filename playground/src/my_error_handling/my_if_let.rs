@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn run() {
     // ifは「式」である
     let result = if 1 == 1 {

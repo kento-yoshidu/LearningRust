@@ -4,6 +4,7 @@ mod my_result;
 mod my_error_handling;
 mod my_iterator;
 mod my_ownership;
+mod my_lifetime;
 mod other;
 
 fn main() {
@@ -50,9 +51,10 @@ fn main() {
     other::my_attribute::run();
 
     other::my_default::run();
-    */
 
     other::my_method::run();
+    */
 
-    // my_ownership::my_ownership::my_ownership();
+    println!("\n --- ライフタイム --- \n");
+    my_lifetime::my_lifetime::run();
 }
