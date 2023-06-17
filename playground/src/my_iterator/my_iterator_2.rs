@@ -1,6 +1,6 @@
-
 use itertools::{Itertools};
 
+#[allow(dead_code)]
 pub fn run() {
     /* Iteratorが実装しているメソッドを詳解する */
 
@@ -30,7 +30,7 @@ pub fn run() {
 
     let vec = [1, 2, 3];
 
-    let mut iter = vec.iter();
+    let mut _iter = vec.iter();
 
     println!("2: iter.last = {:?}\n", iter.last());
     //=> 2: iter.last = Some(3)
@@ -115,7 +115,7 @@ pub fn run() {
 
     let vec = vec!["1", "2", "a", "b", "c", "3"];
 
-    let mut iter = vec.iter().find_map(|x| x.parse::<i32>().ok());
+    let mut _iter = vec.iter().find_map(|x| x.parse::<i32>().ok());
 
     // Some<i32>
     println!("8: vecの中でi32に変換できるものの内、最初の要素 = {:?}\n", iter);

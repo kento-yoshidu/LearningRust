@@ -1,10 +1,11 @@
 /* 基本文法 */
 
-#[cfg(dead_code)]
+#[allow(dead_code)]
 fn devide(x: i32, y: i32) -> i32 {
     x / y
 }
 
+#[allow(dead_code)]
 fn devide2(x: i32, y: i32) -> Result<i32, String> {
     if y == 0 {
         Err(String::from("0除算エラーです"))
@@ -13,6 +14,7 @@ fn devide2(x: i32, y: i32) -> Result<i32, String> {
     }
 }
 
+#[allow(dead_code)]
 fn call_devide2(x: i32, y: i32) -> Result<i32, String> {
     // エラーだった場合は、call_devide2の呼び出しもとにErrが返る
     let ok = devide2(x, y)?;
@@ -22,6 +24,7 @@ fn call_devide2(x: i32, y: i32) -> Result<i32, String> {
     Ok(ok)
 }
 
+#[allow(dead_code)]
 pub fn run() {
     // 0除算でパニックになる
     //println!("{}", devide(100, 0));
