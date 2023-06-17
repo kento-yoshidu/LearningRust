@@ -15,9 +15,9 @@ pub fn run() {
 
     // 論駁不可能
     // `PATTERN`はどんな値もとり得る
-    let x = 1;
-    let x = String::from("Hello World");
-    let (x, y, z) = (10, 10, -5);
+    let _x = 1;
+    let _x = String::from("Hello World");
+    let (_x, _y, _z) = (10, 10, -5);
 
     // PATTERNとEXPRESSIONの全体の型が一致しないので、コンパイルエラーになる
     // let (x, y) = (10, 10, -5);

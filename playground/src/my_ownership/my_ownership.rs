@@ -1,7 +1,9 @@
+#[allow(dead_code)]
 fn echo(s: String) {
     println!("{}", s);
 }
 
+#[allow(dead_code)]
 pub fn my_ownership() {
     let i1 = 1;
     let i2 = 2;
@@ -77,7 +79,7 @@ pub fn my_ownership() {
     //=> 9: s2のヒープ領域に確保される領域のサイズ 10
 
     // 所有権の移動が起きる
-    let s2 = s1;
+    let _s2 = s1;
 
     // println!("🦀❓ s1の値 = {}", s1);
     //                             ^^ value borrowed here after move
