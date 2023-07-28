@@ -7,6 +7,7 @@ mod my_ownership;
 mod my_lifetime;
 mod other;
 
+#[allow(unused)]
 fn main() {
     /*
     println!("\n --- 変数 --- \n");
@@ -53,8 +54,8 @@ fn main() {
     other::my_default::run();
 
     other::my_method::run();
-    */
 
     println!("\n --- ライフタイム --- \n");
     my_lifetime::my_lifetime::run();
+    */
 }
