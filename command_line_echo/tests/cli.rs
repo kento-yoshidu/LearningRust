@@ -12,6 +12,13 @@ fn sample() {
 }
 
 #[test]
+fn sample2() {
+    let mut cmd = Command::cargo_bin("command_line_echo").unwrap();
+
+    cmd.args(vec!["Hello there"]).assert().success().stdout("Hello there\n");
+}
+
+#[test]
 fn dies_no_args() -> TestResult {
     Command::cargo_bin("command_line_echo")?
         .assert()
