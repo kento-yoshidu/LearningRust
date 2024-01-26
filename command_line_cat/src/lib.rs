@@ -1,7 +1,10 @@
-use std::error::Error;
 use clap::{App, Arg};
+use std::error::Error;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader};
 
 #[derive(Debug)]
+#[allow(unused)]
 pub struct Config {
     files: Vec<String>,
     number_lines: bool,
@@ -11,8 +14,27 @@ pub struct Config {
 type MyResult<T> = Result<T, Box<dyn Error>>;
 
 pub fn run(config: Config) -> MyResult<()> {
-    dbg!(config);
+    for file_name in config.files {
+        println!("file_name = {}", file_name);
+        match open(&file_name) {
+            Err(err) => eprintln!("Failed to open {}: {}", file_name, err),
+            Ok(file) => {
+                for (line_num, line_result) in file.lines().enumerate() {
+                    println!("{}", line_num);
+                    println!("{:?}", line_result);
+                }
+            }
+        }
+    }
+
     Ok(())
+}
+
+fn open(file_name: &str) -> MyResult<Box<dyn BufRead>> {
+    match file_name {
+        "-" => Ok(Box::new(BufReader::new(io::stdin()))),
+        _ => Ok(Box::new(BufReader::new(File::open(file_name)?))),
+    }
 }
 
 pub fn get_args() -> MyResult<Config> {
@@ -45,8 +67,8 @@ pub fn get_args() -> MyResult<Config> {
         .get_matches();
 
     Ok(Config {
-        files: vec!["-".to_string()],
-        number_lines: false,
-        number_nonblank_lines: false,
+        files: matches.values_of_lossy("files").unwrap(),
+        number_lines: matches.is_present("number"),
+        number_nonblank_lines: matches.is_present("number-nonblank"),
     })
 }
