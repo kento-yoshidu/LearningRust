@@ -1,5 +1,7 @@
 use clap::{App, Arg};
 use std::error::Error;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader};
 
 type MyResult<T> = Result<T, Box<dyn Error>>;
 
@@ -12,8 +14,22 @@ pub struct Config {
     chars: bool,
 }
 
+#[derive(Debug, PartialEq)]
+pub struct FileInfo {
+    num_lines: usize,
+    num_words: usize,
+    num_bytes: usize,
+    num_chars: usize,
+}
+
 pub fn run(config: Config) -> MyResult<()> {
-    println!("{:#?}", config);
+    for file_name in &config.files {
+        match open(file_name) {
+            Err(e) => eprintln!("{}: {}", file_name, e),
+            Ok(_) => println!("Opened {}", file_name),
+        }
+    }
+
     Ok(())
 }
 
@@ -61,10 +77,16 @@ pub fn get_args() -> MyResult<Config> {
         .get_matches();
 
     let files = matches.values_of_lossy("files").unwrap();
-    let lines = matches.is_present("lines");
-    let words = matches.is_present("words");
-    let bytes = matches.is_present("bytes");
+    let mut lines = matches.is_present("lines");
+    let mut words = matches.is_present("words");
+    let mut bytes = matches.is_present("bytes");
     let chars = matches.is_present("chars");
+
+    if [lines, words, bytes, chars].iter().all(|c| c == &false) {
+        lines = true;
+        words = true;
+        bytes = true;
+    }
 
     Ok(Config {
         files,
@@ -73,4 +95,47 @@ pub fn get_args() -> MyResult<Config> {
         bytes,
         chars,
     })
+}
+
+fn open(file_name: &str) -> MyResult<Box<dyn BufRead>> {
+    match file_name {
+        "-" => Ok(Box::new(BufReader::new(io::stdin()))),
+        _ => Ok(Box::new(BufReader::new(File::open(file_name)?))),
+    }
+}
+
+pub fn count(mut file: impl BufRead) -> MyResult<FileInfo> {
+    let mut num_lines = 0;
+    let mut num_words = 0;
+    let mut num_bytes = 0;
+    let mut num_chars = 0;
+
+    Ok(FileInfo {
+        num_lines,
+        num_words,
+        num_bytes,
+        num_chars,
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{count, FileInfo};
+    use std::io::Cursor;
+
+    #[test]
+    fn test_count() {
+        let text = "I dont want the world";
+        let info = count(Cursor::new(text));
+        assert!(info.is_ok());
+
+        let expected = FileInfo {
+            num_lines: 1,
+            num_words: 10,
+            num_chars: 48,
+            num_bytes: 48,
+        };
+
+        assert_eq!(info.unwrap(), expected);
+    }
 }
