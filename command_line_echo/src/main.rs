@@ -21,7 +21,14 @@ fn main() {
             )
             .get_matches();
 
-    let text = temp.values_of_lossy("text").unwrap();
+    let mut text = temp.values_of_lossy("text").unwrap();
+
+    for t in text.iter() {
+        if t.chars().nth(0).unwrap() == '$' {
+            println!("$$$$$$$$$$");
+        }
+    }
+
     let omit_newline = temp.is_present("omit_newline");
 
     print!("{}{}", text.join(" "), if omit_newline { "" } else { "\n" });
