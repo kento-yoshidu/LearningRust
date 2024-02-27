@@ -1,5 +1,6 @@
 use clap::{App, Arg};
 use std::error::Error;
+use std::ffi::c_int;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 
@@ -26,7 +27,22 @@ pub fn run(config: Config) -> MyResult<()> {
     for file_name in &config.files {
         match open(file_name) {
             Err(e) => eprintln!("{}: {}", file_name, e),
-            Ok(_) => println!("Opened {}", file_name),
+            Ok(file) => {
+                if let Ok(info) = count(file) {
+                    println!(
+                        "{}{}{}{}{}",
+                        format_field(info.num_lines, config.lines),
+                        format_field(info.num_words, config.words),
+                        format_field(info.num_bytes, config.bytes),
+                        format_field(info.num_chars, config.chars),
+                        if file_name == "-" {
+                            "".to_string()
+                        } else {
+                            format!(" {}", file_name)
+                        }
+                    );
+                }
+            }
         }
     }
 
@@ -109,6 +125,21 @@ pub fn count(mut file: impl BufRead) -> MyResult<FileInfo> {
     let mut num_words = 0;
     let mut num_bytes = 0;
     let mut num_chars = 0;
+    let mut line = String::new();
+
+    loop {
+        let line_bytes = file.read_line(&mut line)?;
+
+        if line_bytes == 0 {
+            break;
+        }
+
+        num_bytes += line_bytes;
+        num_lines += 1;
+        num_words += line.split_whitespace().count();
+        num_chars += line.chars().count();
+        line.clear();
+    }
 
     Ok(FileInfo {
         num_lines,
@@ -118,14 +149,24 @@ pub fn count(mut file: impl BufRead) -> MyResult<FileInfo> {
     })
 }
 
+fn format_field(value: usize, show: bool) -> String {
+    if show {
+        format!("{:>8}", value)
+    } else {
+        "".to_string()
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use crate::format_field;
+
     use super::{count, FileInfo};
     use std::io::Cursor;
 
     #[test]
     fn test_count() {
-        let text = "I dont want the world";
+        let text = "I don't want the world. I just want your falt.\r\n";
         let info = count(Cursor::new(text));
         assert!(info.is_ok());
 
@@ -137,5 +178,12 @@ mod tests {
         };
 
         assert_eq!(info.unwrap(), expected);
+    }
+
+    #[test]
+    fn test_format_field() {
+        assert_eq!(format_field(1, false), "");
+        assert_eq!(format_field(3, true), "       3");
+        assert_eq!(format_field(10, true), "      10");
     }
 }
