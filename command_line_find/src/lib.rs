@@ -1,7 +1,8 @@
 use crate::EntryType::*;
 use clap::{App, Arg};
 use regex::Regex;
-use std::{arch::x86_64::_MM_FROUND_CEIL, error::Error};
+use walkdir::WalkDir;
+use std::error::Error;
 
 type MyResult<T> = Result<T, Box<dyn Error>>;
 
@@ -89,6 +90,26 @@ pub fn get_args() -> MyResult<Config> {
 }
 
 pub fn run(config: Config) -> MyResult<()> {
-    println!("{:?}", config);
+    for path in config.paths {
+        for entry in WalkDir::new(path) {
+            match  entry {
+                Ok(entry) => {
+                    if config.entry_types.is_empty() ||
+                        config.entry_types.iter().any(|entry_type| {
+                            match entry_type {
+                                Link => entry.file_type().is_symlink(),
+                                Dir => entry.file_type().is_file(),
+                                File => entry.file_type().is_file(),
+                            }
+                        })
+                    {
+                        println!("{}", entry.path().display());
+                    }
+                },
+                Err(e) => eprintln!("{}", e),
+            }
+        }
+    }
+
     Ok(())
 }
