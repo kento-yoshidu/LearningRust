@@ -5,7 +5,7 @@ use pretty_assertions::assert_eq;
 use rand::{distributions::Alphanumeric, Rng};
 use std::{borrow::Cow, fs, path::Path};
 
-const PRG: &str = "findr";
+const PRG: &str = "command_line_find";
 
 // --------------------------------------------------
 fn gen_bad_file() -> String {
