@@ -26,14 +26,14 @@ fn load_config(file_path: &str) -> MyResult<Config> {
     Ok(config)
 }
 
-fn add(base_file: &str, append_file: &str, output_file: &str) -> io::Result<()> {
+pub fn add(base_file: &str, append_file: &str, output_file: &str) -> io::Result<()> {
     let base_content = fs::read_to_string(base_file)?;
 
     let append_content = fs::read_to_string(append_file)?;
 
     let mut file = File::create(output_file)?;
 
-    writeln!(file, "{}\n\n{}", base_content, append_content)?;
+    write!(file, "{}\n\n{}", base_content, append_content)?;
 
     Ok(())
 }
