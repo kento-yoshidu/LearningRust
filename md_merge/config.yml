@@ -1,0 +1,3 @@
+base_file: "base.md"
+append_file: "append.md"
+output_file: "merged.md"

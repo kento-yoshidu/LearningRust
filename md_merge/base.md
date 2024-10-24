@@ -1,8 +1,3 @@
-# Hello World
+# Base file
 
-```graphql
-type User {
-  name: String
-}
-```
-
+This is a base file.
