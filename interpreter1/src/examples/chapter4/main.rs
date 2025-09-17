@@ -38,13 +38,6 @@ fn is_op(s: &str) -> bool {
     s == "+" || s == "-" || s == "*" || s == "/"
 }
 
-fn is_num(v: &str) -> bool {
-    match v.parse::<f64>() {
-        Ok(_) => true,
-        Err(_) => false,
-    }
-}
-
 fn main() {
     let mut stack: Stack = Stack::new();
 
@@ -154,4 +147,3 @@ mod tests {
         assert!(!is_op("1"));
     }
 }
-
